@@ -29,7 +29,7 @@ job :fbo do
   end
 
   task :index do
-    triggered_by :ingest_succeeded
+    triggered_by [:ingest_succeeded, :reingest_succeeded]
     runs         :anytime
     execute      Fbo::Index
     timeout      1.hour
