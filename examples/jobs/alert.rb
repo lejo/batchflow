@@ -5,7 +5,7 @@ job :alert do
                  :news_alert_ping,
                  :legislation_index_succeeded
     runs         :anytime
-    execure      Alert::Send
+    execute      Alert::Send
     on_error     Notify::Failure
   end
 

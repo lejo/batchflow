@@ -1,17 +1,31 @@
 job :fbo do
 
-  trigger :directory do
-    path   "/data/fbo"
-    events [:new_file, :file_updated]
+  trigger :new_fbo_file do
+    path   "/data/fbo", :recursive => true
+    events :new_file
   end
 
   task :ingest do
-    triggered_by :directory
+    triggered_by :new_fbo_file
     runs         :anytime
     execute      Fbo::Ingest
     on_error     Notify::Failure
     timeout      20.minutes
     on_timeout   :run => Notify::OverTime, :then => :continue
+  end
+
+  trigger :fbo_file_updated do
+    path   "/data/fbo", :recursive => true
+    events :file_updated
+  end
+
+  task :reingest do
+    triggered_by :fbo_file_updated
+    runs         :anytime
+    execute      Fbo::Reingest
+    on_error     Notify::Failure
+    timeout      5.minutes
+    on_timeout   :run => Notify::OverTime, :then => :abort
   end
 
   task :index do
