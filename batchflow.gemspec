@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.name        = "batchflow"
   s.version     = Batchflow::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
+  s.authors     = ["Lejo Varughese", "Chaz Chandler"]
+  s.email       = ["lejo.varughese@gmail.com", "clc31@inbox.com"]
+  s.homepage    = "https://github.com/lejo/batchflow"
+  s.summary     = %q{batchflow is a background jobs dependency manager for Ruby web applications.}
   s.description = %q{TODO: Write a gem description}
 
   s.rubyforge_project = "batchflow"
@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  
+
+  s.add_dependency("cool.io", "=1.1.0")
+  s.add_dependency("resque", "=1.19.0")
+
   s.add_development_dependency('rspec')
 end
