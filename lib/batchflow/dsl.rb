@@ -7,12 +7,14 @@ module BatchFlow
     end
 
     def job(name, &block)
-      @jobs << BatchFlow::Job.new(:name => name,
-                             :tasks => TaskDsl.new(&block).tasks)
+      @jobs << BatchFlow::Job.new(
+        :name  => name,
+        :tasks => JobDsl.new(&block).tasks
+      )
     end
   end
 
-  class TaskDsl
+  class JobDsl
     attr_reader :tasks
     def initialize
       @tasks = []
@@ -20,13 +22,19 @@ module BatchFlow
     end
 
     def task(name, &block)
-      @tasks << BatchFlow::Task.new(:name => name,
-                                    :triggers => TriggerDsl.new(&block).triggers)
+      task_dsl = TaskDsl.new(&block)
+      @tasks << BatchFlow::Task.new(
+        :name     => name,
+        :triggers => task_dsl.triggers,
+        :execute  => task_dsl.execution_config,
+        :on_error => task_dsl.on_error_config,
+        :runs     => task_dsl.run_config
+      )
     end
   end
 
-  class TriggerDsl
-    attr_reader :triggers
+  class TaskDsl
+    attr_reader :triggers, :run_config, :on_error_config, :execution_config
     def initialize
       @triggers = []
       yield self
@@ -34,6 +42,18 @@ module BatchFlow
 
     def triggered_by(params)
       @triggers << BatchFlow::Trigger.new(params)
+    end
+
+    def runs(run_config)
+      @run_config = run_config
+    end
+
+    def on_error(error_config)
+      @on_error_config = error_config
+    end
+
+    def execute(execution_config)
+      @execution_config = execution_config
     end
   end
 end

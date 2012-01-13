@@ -1,11 +1,11 @@
 job "ingest people csv" do |j|
   j.task "wait for file" do |t|
     t.triggered_by :type => :file, :path => "/path/to/people.csv", :events => [:create]
-#     # runs         :anytime
-#     # execute      Alert::Send
-#     # on_error     Notify::Failure
+    t.runs         :anytime
+    t.on_error     :notify
   end
-  j.task "read file" do |t|
+  j.task "ingest file" do |t|
     t.triggered_by :type => :task, :name => "wait for file"
+    t.execute :ingest
   end
 end
