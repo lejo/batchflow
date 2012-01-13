@@ -3,7 +3,7 @@ module BatchFlow
     attr_reader :jobs
     def initialize(job_spec)
       @jobs = []
-      [eval(File.read(File.expand_path(job_spec)))]
+      eval(File.read(File.expand_path(job_spec)))
     end
 
     def job(name, &block)
