@@ -2,14 +2,13 @@ module BatchFlow
   class Dsl
     attr_reader :jobs
     def initialize(job_spec)
-      @jobs, @triggers = [],[],[]
+      @jobs = []
       [eval(File.read(File.expand_path(job_spec)))]
     end
 
     def job(name, &block)
-      j = BatchFlow::Job.new(:name => name,
+      @jobs << BatchFlow::Job.new(:name => name,
                              :tasks => TaskDsl.new(&block).tasks)
-      @jobs << j
     end
   end
 
