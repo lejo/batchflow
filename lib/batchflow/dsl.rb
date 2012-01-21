@@ -1,9 +1,12 @@
 module BatchFlow
   class Dsl
     attr_reader :jobs
-    def initialize(job_spec)
+    def initialize(job_specs)
       @jobs = []
-      eval(File.read(File.expand_path(job_spec)))
+      job_specs = job_specs.is_a?(Array) ? job_specs : [job_specs]
+      job_specs.each do |job_spec|
+        eval(File.read(File.expand_path(job_spec)))
+      end
     end
 
     def job(name, &block)
