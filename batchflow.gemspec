@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency("cool.io", "=1.1.0")
   s.add_dependency("resque", "=1.19.0")
+  s.add_dependency("eventmachine", "=0.12.10")
 
   s.add_development_dependency('rspec')
 end
