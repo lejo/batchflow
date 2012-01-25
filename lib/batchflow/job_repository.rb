@@ -1,7 +1,6 @@
 module BatchFlow
   class JobRepository
     JOBS_PATH = File.join(File.dirname(__FILE__), '..', '..', 'jobs')
-
     attr_reader :jobs
 
     def initialize(options = {})
