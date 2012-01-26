@@ -24,7 +24,6 @@ describe BatchFlow::Dsl do
       context "second task" do
         let('second_task') {tasks.last}
         it { second_task.name.should == "ingest file" }
-        it { second_task.execute.should == :ingest }
         context "triggers" do
           let('triggers') {second_task.triggers}
           it {triggers.size.should == 1}

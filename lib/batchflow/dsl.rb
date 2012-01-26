@@ -12,15 +12,16 @@ module BatchFlow
     def job(name, &block)
       @jobs << BatchFlow::Job.new(
         :name  => name,
-        :tasks => JobDsl.new(&block).tasks
+        :tasks => JobDsl.new(name, &block).tasks
       )
     end
   end
 
   class JobDsl
     attr_reader :tasks
-    def initialize
+    def initialize(job_name)
       @tasks = []
+      @job_name = job_name
       yield self
     end
 
@@ -28,6 +29,7 @@ module BatchFlow
       task_dsl = TaskDsl.new(&block)
       @tasks << BatchFlow::Task.new(
         :name     => name,
+        :job_name => @job_name,
         :triggers => task_dsl.triggers,
         :execute  => task_dsl.execution_config,
         :on_error => task_dsl.on_error_config,
