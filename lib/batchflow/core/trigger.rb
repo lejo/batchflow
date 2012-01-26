@@ -12,14 +12,14 @@ module BatchFlow
     end
 
     def ready?
-      deferred_status == :succeeded
+      @deferred_status == :succeeded
     end
 
     private
 
     def init_watcher
       if @type == :file
-        # EM::watch_file(@path, BatchFlow::FileWatcher, self)
+        EM::watch_file(@path, BatchFlow::FileWatcher, self)
       end
     end
 

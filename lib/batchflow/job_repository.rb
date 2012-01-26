@@ -13,6 +13,10 @@ module BatchFlow
       triggers.select {|t| t.type == :file}.map(&:path).uniq
     end
 
+    def init!
+      @jobs.map(&:init!)
+    end
+
     private
 
     def load_jobs(jobs_path)

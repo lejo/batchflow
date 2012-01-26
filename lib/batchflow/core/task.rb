@@ -7,13 +7,14 @@ module BatchFlow
       attrs.each_pair {|k,v| instance_variable_set "@#{k}".to_sym, v}
     end
 
-    def init
+    def init!
       discover_task_payload_klass
       init_callbacks
+      init_triggers
     end
 
     def ready?
-      deferred_status == :succeeded
+      @deferred_status == :succeeded
     end
 
     private
@@ -30,21 +31,30 @@ module BatchFlow
 
     def discover_task_payload_klass
       job_module_name = @job_name.to_s.split('_').map(&:capitalize).join
-      payload_klass_name = @name.split('_').map(&:capitalize).join
+      payload_klass_name = @name.to_s.split('_').map(&:capitalize).join
 
       begin
         job_module = BatchFlow::Payloads.const_get(job_module_name.to_sym)
-        klass = job_module.const_get(payload_klass_name.to_sym)
+        @payload_klass = job_module.const_get(payload_klass_name.to_sym)
       rescue NameError
-        raise "Could not locate task payload class for #{@job_name}::#{@name}" unless klass
+        raise "Could not locate task payload class for #{@job_name}::#{@name}" unless @payload_klass
       end
+    end
 
-      klass
+    def init_triggers
+      @triggers.map(&:init!)
     end
 
     def complete!
-      # discover task class and invoke payload
-      # mark succeeded
+      run = lambda do
+        @payload_klass.run
+        puts "task done"
+      end
+      suc = lambda do |result|
+        succeed
+      end
+
+      EM.defer(run, suc)
     end
   end
 end

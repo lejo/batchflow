@@ -1,10 +1,18 @@
 module BatchFlow
   class Engine
-    attr_reader :jobs
+    def self.run
+      set_em_opts
+      @job_repo = BatchFlow::JobRepository.new
 
-    def initialize(opts = {})
-      @opts = opts
-      @jobs = []
+      EM.run do
+        @job_repo.init!
+      end
+    end
+
+    private
+
+    def self.set_em_opts
+      EM.kqueue = true
     end
   end
 end

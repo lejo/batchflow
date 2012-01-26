@@ -9,6 +9,7 @@ module BatchFlow
 
     def init!
       init_callbacks
+      init_tasks
     end
 
     private
@@ -23,8 +24,12 @@ module BatchFlow
       end
     end
 
-    def complete!
+    def init_tasks
+      @tasks.map(&:init!)
+    end
 
+    def complete!
+      puts "job done"
     end
   end
 end
