@@ -8,11 +8,6 @@ module BatchFlow
       load_jobs(options[:jobs_path] || JOBS_PATH)
     end
 
-    def file_paths
-      triggers = @jobs.map(&:tasks).flatten.map(&:triggers).flatten
-      triggers.select {|t| t.type == :file}.map(&:path).uniq
-    end
-
     def init!
       @jobs.map(&:init!)
     end

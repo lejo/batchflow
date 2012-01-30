@@ -10,22 +10,4 @@ describe BatchFlow::JobRepository do
       repository.jobs.size.should == 3
     end
   end
-
-  context "file_paths" do
-    it "returns all paths across jobs" do
-      repository.file_paths.should ==  ["/path/to/people.csv", "/path/to/people_updates.csv"]
-    end
-  end
-
-  context "schedules" do
-
-  end
-
-  context "timers" do
-
-  end
-
-  context "events" do
-
-  end
 end

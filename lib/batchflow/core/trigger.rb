@@ -15,11 +15,25 @@ module BatchFlow
       @deferred_status == :succeeded
     end
 
+    def files_modified(paths)
+      puts "fired"
+      succeed
+    end
+
+    def files_deleted(paths)
+      succeed
+    end
+
+    def files_created(paths)
+      succeed
+    end
+
     private
 
     def init_watcher
       if @type == :file
-        EM::watch_file(@path, BatchFlow::FileWatcher, self)
+        e = Hash[@events.map {|ev| [ev, true]}]
+        BatchFlow::FileWatcher.new(@path, self, e)
       end
     end
 

@@ -19,9 +19,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency("cool.io", "=1.1.0")
-  s.add_dependency("resque", "=1.19.0")
   s.add_dependency("eventmachine", "=0.12.10")
 
   s.add_development_dependency('rspec')
+  s.add_development_dependency('em-spec', '= 0.2.6')
 end
