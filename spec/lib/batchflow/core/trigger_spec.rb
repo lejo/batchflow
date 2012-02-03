@@ -15,4 +15,17 @@ describe BatchFlow::Trigger do
     end
   end
 
+  context "time-type trigger" do
+    it "should create a new TimeWatcher" do
+      BatchFlow::TimeWatcher.should_receive(:new)
+      trigger_opts = {
+        :type => :time,
+        :time => Time.now,
+        :events => [:chime]
+      }
+      t = BatchFlow::Trigger.new(trigger_opts)
+      t.init!
+    end
+  end
+
 end
