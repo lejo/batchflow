@@ -20,7 +20,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency("eventmachine", "=0.12.10")
-
   s.add_development_dependency('rspec')
-  s.add_development_dependency('em-spec', '= 0.2.6')
 end

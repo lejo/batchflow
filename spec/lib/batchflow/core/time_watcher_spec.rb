@@ -1,8 +1,6 @@
 require 'spec_helper'
-require "em-spec/rspec"
 
 describe BatchFlow::TimeWatcher do
-  include EM::SpecHelper
   context "absolute one-time trigger" do
     let (:time) do
       Time.now + 3
@@ -15,56 +13,38 @@ describe BatchFlow::TimeWatcher do
         :events => [:chime])
 
       trigger.should_receive(:chiming).with(time)
-      with_em(trigger) do
-        trigger.init!
-      end
+      trigger.init!
     end
   end
 
   context "recurring time trigger" do
-    let (:time) do
-      Time.now + 2
-    end
-
+    let (:time) {0}
     it "triggers every two seconds" do
       trigger = BatchFlow::Trigger.new(
         :type => :time,
-        :time => time,
+        :time => 0,
         :events => [:chime],
         :every => 2)
 
+      Time.should_receive(:now).exactly(3).times.and_return(0, 2, 8)
       trigger.should_receive(:chiming).twice
-      with_em(trigger) do
-        trigger.init!
-      end
+
+      trigger.init!
     end
   end
 
   context "timeout trigger" do
-    let (:time) do
-      Time.now + 2
-    end
-
     it "should time out at a given time" do
+      time = Time.now
       trigger = BatchFlow::Trigger.new(
         :type => :time,
-        :time => time,
+        :time => time + 2,
         :events => [:timeout])
 
+      Time.stub(:now).and_return(time + 1, time + 2)
+
       trigger.should_receive(:timing_out)
-      with_em(trigger) do
-        trigger.init!
-      end
+      trigger.init!
     end
   end
-
-  def with_em(trigger)
-    em do
-      trigger.callback { EM.stop }
-      trigger.timeout(5)
-      trigger.errback { EM.stop }
-      yield
-    end
-  end
-
 end

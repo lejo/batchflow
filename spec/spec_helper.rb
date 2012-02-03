@@ -10,6 +10,10 @@ EM.instance_eval do
     yield
   end
 
+  def add_timer(i)
+    yield
+  end
+
   def trigger_timer
     @periodic_block.call
   end

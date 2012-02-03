@@ -46,7 +46,6 @@ module BatchFlow
         BatchFlow::FileWatcher.new(@path, self, e)
       elsif @type == :time
         e = Hash[@events.map {|ev| [ev, true]}]
-        #puts "time trigger with args #{e.inspect}"
         opts = e.merge(:every => @every)
         BatchFlow::TimeWatcher.new(@time, self, opts)
       end
