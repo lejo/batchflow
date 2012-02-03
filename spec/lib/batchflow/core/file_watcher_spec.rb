@@ -1,15 +1,9 @@
 require 'spec_helper'
 require 'tempfile'
-require "em-spec/rspec"
 
 describe BatchFlow::FileWatcher do
-  include EM::SpecHelper
   context "modified files" do
-    let (:file) do
-      f = Tempfile.new('file_watcher_spec')
-      sleep 1 # wait for mtime
-      f
-    end
+    let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
 
     it "does not trigger if not subscribed to edits" do
       trigger = BatchFlow::Trigger.new(
@@ -17,11 +11,12 @@ describe BatchFlow::FileWatcher do
         :path => file.path,
         :events => [:create])
 
+      trigger.init!
+      file << "some content"
+      file.close
+
       trigger.should_not_receive(:files_modified)
-      with_em(trigger) do
-        trigger.init!
-        sleep 1
-      end
+      EM.trigger_timer
     end
 
     it "triggers when modified" do
@@ -30,21 +25,17 @@ describe BatchFlow::FileWatcher do
         :path => file.path,
         :events => [:modify])
 
-      trigger.should_receive(:files_modified).with([file.path])
+      trigger.init!
+      file << "some content"
+      file.close
 
-      with_em(trigger) do
-        trigger.init!
-        sleep 1
-        file << "some content"
-        file.close
-      end
+      trigger.should_receive(:files_modified).with([file.path])
+      EM.trigger_timer
     end
 
     after do
-      file.close
       file.unlink
     end
-
   end
 
   context "new files" do
@@ -55,16 +46,17 @@ describe BatchFlow::FileWatcher do
         :path => path,
         :events => [:modify])
 
+      trigger.init!
+      f = Tempfile.new("watcher_create_spec")
+      f.close
+
       trigger.should_not_receive(:files_created)
-      with_em(trigger) do
-        trigger.init!
-        f = Tempfile.new("watcher_create_spec")
-        f.close
-        f.unlink
-      end
+      EM.trigger_timer
+
+      f.unlink
     end
 
-    xit "triggers when created" do
+    it "triggers when created" do
       t = Time.now.to_i
       path = File.join(Dir.tmpdir, "#{t}*")
       trigger = BatchFlow::Trigger.new(
@@ -72,23 +64,14 @@ describe BatchFlow::FileWatcher do
         :path => path,
         :events => [:create])
 
-      trigger.should_receive(:files_created)
-      with_em(trigger) do
-        trigger.init!
-        f = Tempfile.new(t.to_s)
-        sleep 1
-        f.close
-        f.unlink
-      end
-    end
-  end
+      trigger.init!
+      f = Tempfile.new(t.to_s)
+      f.close
 
-  def with_em(trigger)
-    em do
-      trigger.callback { EM.stop }
-      trigger.timeout(2)
-      trigger.errback { EM.stop }
-      yield
+      trigger.should_receive(:files_created).with([f.path])
+      EM.trigger_timer
+
+      f.unlink
     end
   end
 end
