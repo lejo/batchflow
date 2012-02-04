@@ -2,11 +2,9 @@ module BatchFlow
   module Core
     class Task
       include EM::Deferrable
-      attr_reader :name, :triggers, :runs, :on_error
+      include BatchFlow::HashInitializer
 
-      def initialize(attrs)
-        attrs.each_pair {|k,v| instance_variable_set "@#{k}".to_sym, v}
-      end
+      attr_reader :name, :triggers, :runs, :on_error
 
       def init!
         discover_task_payload_klass
