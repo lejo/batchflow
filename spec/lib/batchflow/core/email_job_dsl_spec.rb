@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe BatchFlow::Dsl do
+describe BatchFlow::Core::Dsl do
   context "the people csv ingestion dsl" do
-    let('dsl') { BatchFlow::Dsl.new("spec/fixtures/jobs/email_people_csv.rb") }
+    let('dsl') { BatchFlow::Core::Dsl.new("spec/fixtures/jobs/email_people_csv.rb") }
     it { dsl.jobs.size.should == 1 }
     it { dsl.jobs.first.name.should == "email people csv" }
     context "tasks" do

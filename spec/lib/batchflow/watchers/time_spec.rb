@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe BatchFlow::TimeWatcher do
+describe BatchFlow::Watchers::Time do
   context "absolute one-time trigger" do
     let (:time) do
       Time.now + 3
     end
 
     it "triggers when time reached" do
-      trigger = BatchFlow::TimerTrigger.new(
+      trigger = BatchFlow::Triggers::Time.new(
         :type => :time,
         :time => time,
         :events => [:chime])
@@ -20,7 +20,7 @@ describe BatchFlow::TimeWatcher do
   context "recurring time trigger" do
     let (:time) {0}
     it "triggers every two seconds" do
-      trigger = BatchFlow::TimerTrigger.new(
+      trigger = BatchFlow::Triggers::Time.new(
         :type => :time,
         :time => 0,
         :events => [:chime],
@@ -36,7 +36,7 @@ describe BatchFlow::TimeWatcher do
   context "timeout trigger" do
     it "should time out at a given time" do
       time = Time.now
-      trigger = BatchFlow::TimerTrigger.new(
+      trigger = BatchFlow::Triggers::Time.new(
         :type => :time,
         :time => time + 2,
         :events => [:timeout])

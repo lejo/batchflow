@@ -1,12 +1,12 @@
 require 'spec_helper'
 require 'tempfile'
 
-describe BatchFlow::FileWatcher do
+describe BatchFlow::Watchers::File do
   context "deleted files" do
     let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
 
     it "does not trigger if not subscribed to deletes" do
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => file.path,
         :events => [:create])
@@ -19,7 +19,7 @@ describe BatchFlow::FileWatcher do
     end
 
     it "triggers when deleted" do
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => file.path,
         :events => [:delete])
@@ -40,7 +40,7 @@ describe BatchFlow::FileWatcher do
     let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
 
     it "does not trigger if not subscribed to edits" do
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => file.path,
         :events => [:create])
@@ -54,7 +54,7 @@ describe BatchFlow::FileWatcher do
     end
 
     it "triggers when modified" do
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => file.path,
         :events => [:modify])
@@ -75,7 +75,7 @@ describe BatchFlow::FileWatcher do
   context "new files" do
     it "does not trigger if not subscribed to creates" do
       path = File.join(Dir.tmpdir, "*watcher_create_spec*")
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => path,
         :events => [:modify])
@@ -93,7 +93,7 @@ describe BatchFlow::FileWatcher do
     it "triggers when created" do
       t = Time.now.to_i
       path = File.join(Dir.tmpdir, "#{t}*")
-      trigger = BatchFlow::FileTrigger.new(
+      trigger = BatchFlow::Triggers::File.new(
         :type => :file,
         :path => path,
         :events => [:create])

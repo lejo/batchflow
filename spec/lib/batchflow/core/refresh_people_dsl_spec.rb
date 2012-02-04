@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe BatchFlow::Dsl do
+describe BatchFlow::Core::Dsl do
   context "refresh people cache job" do
-    let('dsl') { BatchFlow::Dsl.new("spec/fixtures/jobs/refresh_people_cache.rb") }
+    let('dsl') { BatchFlow::Core::Dsl.new("spec/fixtures/jobs/refresh_people_cache.rb") }
     it { dsl.jobs.size.should == 1 }
     it { dsl.jobs.first.name.should == :refresh_people_cache }
     context "tasks" do
