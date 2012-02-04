@@ -46,7 +46,14 @@ module BatchFlow
     end
 
     def triggered_by(params)
-      @triggers << BatchFlow::Trigger.new(params)
+      type = params[:type]
+      if type == :file
+        @triggers << BatchFlow::FileTrigger.new(params)
+      elsif type == :timer
+        @triggers << BatchFlow::TimerTrigger.new(params)
+      elsif type == :task
+        @triggers << BatchFlow::TaskTrigger.new(params)
+      end
     end
 
     def runs(run_config)

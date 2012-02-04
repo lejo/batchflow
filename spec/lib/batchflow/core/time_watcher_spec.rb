@@ -7,7 +7,7 @@ describe BatchFlow::TimeWatcher do
     end
 
     it "triggers when time reached" do
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::TimerTrigger.new(
         :type => :time,
         :time => time,
         :events => [:chime])
@@ -20,7 +20,7 @@ describe BatchFlow::TimeWatcher do
   context "recurring time trigger" do
     let (:time) {0}
     it "triggers every two seconds" do
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::TimerTrigger.new(
         :type => :time,
         :time => 0,
         :events => [:chime],
@@ -36,7 +36,7 @@ describe BatchFlow::TimeWatcher do
   context "timeout trigger" do
     it "should time out at a given time" do
       time = Time.now
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::TimerTrigger.new(
         :type => :time,
         :time => time + 2,
         :events => [:timeout])

@@ -6,7 +6,7 @@ describe BatchFlow::FileWatcher do
     let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
 
     it "does not trigger if not subscribed to edits" do
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::FileTrigger.new(
         :type => :file,
         :path => file.path,
         :events => [:create])
@@ -20,7 +20,7 @@ describe BatchFlow::FileWatcher do
     end
 
     it "triggers when modified" do
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::FileTrigger.new(
         :type => :file,
         :path => file.path,
         :events => [:modify])
@@ -41,7 +41,7 @@ describe BatchFlow::FileWatcher do
   context "new files" do
     it "does not trigger if not subscribed to creates" do
       path = File.join(Dir.tmpdir, "*watcher_create_spec*")
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::FileTrigger.new(
         :type => :file,
         :path => path,
         :events => [:modify])
@@ -59,7 +59,7 @@ describe BatchFlow::FileWatcher do
     it "triggers when created" do
       t = Time.now.to_i
       path = File.join(Dir.tmpdir, "#{t}*")
-      trigger = BatchFlow::Trigger.new(
+      trigger = BatchFlow::FileTrigger.new(
         :type => :file,
         :path => path,
         :events => [:create])

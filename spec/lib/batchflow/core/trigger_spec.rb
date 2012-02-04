@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe BatchFlow::Trigger do
-
+describe 'BatchFlow::Trigger' do
   context "file-type trigger" do
     it "should create a new FileWatcher" do
       BatchFlow::FileWatcher.should_receive(:new)
@@ -10,7 +9,7 @@ describe BatchFlow::Trigger do
         :path => "/path/to/file",
         :events => [:modify]
       }
-      t = BatchFlow::Trigger.new(trigger_opts)
+      t = BatchFlow::FileTrigger.new(trigger_opts)
       t.init!
     end
   end
@@ -23,7 +22,7 @@ describe BatchFlow::Trigger do
         :time => Time.now,
         :events => [:chime]
       }
-      t = BatchFlow::Trigger.new(trigger_opts)
+      t = BatchFlow::TimerTrigger.new(trigger_opts)
       t.init!
     end
   end
