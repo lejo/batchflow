@@ -2,6 +2,40 @@ require 'spec_helper'
 require 'tempfile'
 
 describe BatchFlow::FileWatcher do
+  context "deleted files" do
+    let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
+
+    it "does not trigger if not subscribed to deletes" do
+      trigger = BatchFlow::FileTrigger.new(
+        :type => :file,
+        :path => file.path,
+        :events => [:create])
+
+      trigger.init!
+      FileUtils.rm_f(file.path)
+
+      trigger.should_not_receive(:files_deleted)
+      EM.trigger_timer
+    end
+
+    it "triggers when deleted" do
+      trigger = BatchFlow::FileTrigger.new(
+        :type => :file,
+        :path => file.path,
+        :events => [:delete])
+
+      trigger.init!
+      FileUtils.rm_f(file.path)
+
+      trigger.should_receive(:files_deleted).with([file.path])
+      EM.trigger_timer
+    end
+
+    after do
+      file.unlink
+    end
+  end
+
   context "modified files" do
     let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
 
