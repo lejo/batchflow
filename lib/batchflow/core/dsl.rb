@@ -11,10 +11,19 @@ module BatchFlow
       end
 
       def job(name, &block)
+        job_dsl = JobDsl.new(name, &block)
+        tasks = job_dsl.tasks
         @jobs << BatchFlow::Core::Job.new(
           :name  => name,
-          :tasks => JobDsl.new(name, &block).tasks
+          :tasks => tasks
         )
+        setup_task_triggers(tasks)
+      end
+
+      def setup_task_triggers(tasks)
+        task_triggers = tasks.map(&:triggers).flatten.select { |t| t.type == :task }
+        tasks_hash = Hash[tasks.map{ |t| [t.name, t] }]
+        task_triggers.each { |t| t.set_dependent_task(tasks_hash[t.name]) }
       end
     end
 
