@@ -22,7 +22,7 @@ module BatchFlow
 
       def setup_task_triggers(tasks)
         task_triggers = tasks.map(&:triggers).flatten.select { |t| t.type == :task }
-        tasks_hash = Hash[tasks.map{ |t| [t.name, t] }]
+        tasks_hash = Hash[tasks.map { |t| [t.name, t] }]
         task_triggers.each { |t| t.set_dependent_task(tasks_hash[t.name]) }
       end
     end
@@ -64,6 +64,31 @@ module BatchFlow
         elsif type == :task
           @triggers << BatchFlow::Triggers::Task.new(params)
         end
+      end
+
+      def triggered_by_file(path, events)
+        events = if events
+          if !events.is_a?(Array)
+            [events]
+          else
+            events
+          end
+        else
+          [:create, :modify, :delete]
+        end
+        triggered_by({:type => :file, :path => path, :events => events})
+      end
+
+      def triggered_at(time)
+        triggered_by({:type => :timer, :time => time})
+      end
+
+      def triggered_by_task(name)
+        triggered_by({:type => :task, :name => name})
+      end
+
+      def triggered_every(every)
+        triggered_by({:type => :timer, :every => every})
       end
 
       def runs(run_config)
