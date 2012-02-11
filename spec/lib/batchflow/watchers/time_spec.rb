@@ -2,16 +2,14 @@ require 'spec_helper'
 
 describe BatchFlow::Watchers::Time do
   context "absolute one-time trigger" do
-    let (:time) do
-      Time.now + 3
-    end
-
+    let (:time) { 3 }
     it "triggers when time reached" do
       trigger = BatchFlow::Triggers::Time.new(
-        :type => :time,
-        :time => time,
+        :type   => :time,
+        :time   => time,
         :events => [:chime])
 
+      Time.stub(:now).and_return(time)
       trigger.should_receive(:chiming).with(time)
       trigger.init!
     end
@@ -21,10 +19,10 @@ describe BatchFlow::Watchers::Time do
     let (:time) {0}
     it "triggers every two seconds" do
       trigger = BatchFlow::Triggers::Time.new(
-        :type => :time,
-        :time => 0,
+        :type   => :time,
+        :time   => 0,
         :events => [:chime],
-        :every => 2)
+        :every  => 2)
 
       Time.should_receive(:now).exactly(3).times.and_return(0, 2, 8)
       trigger.should_receive(:chiming).twice
@@ -34,11 +32,11 @@ describe BatchFlow::Watchers::Time do
   end
 
   context "timeout trigger" do
+    let ('time') { 0 }
     it "should time out at a given time" do
-      time = Time.now
       trigger = BatchFlow::Triggers::Time.new(
-        :type => :time,
-        :time => time + 2,
+        :type   => :time,
+        :time   => time + 2,
         :events => [:timeout])
 
       Time.stub(:now).and_return(time + 1, time + 2)

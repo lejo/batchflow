@@ -4,7 +4,7 @@ module BatchFlow
       include EM::Deferrable
       include BatchFlow::HashInitializer
 
-      attr_reader :name, :triggers, :runs, :on_error
+      attr_reader :name, :triggers
 
       def init!
         discover_task_payload_klass

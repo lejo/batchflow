@@ -3,12 +3,12 @@ require 'tempfile'
 
 describe BatchFlow::Watchers::File do
   context "deleted files" do
-    let (:file) { f = Tempfile.new('file_watcher_spec'); sleep 1; f }
+    let (:file) { f = Tempfile.new('file_watcher_spec') }
 
     it "does not trigger if not subscribed to deletes" do
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => file.path,
+        :type   => :file,
+        :path   => file.path,
         :events => [:create])
 
       trigger.init!
@@ -20,8 +20,8 @@ describe BatchFlow::Watchers::File do
 
     it "triggers when deleted" do
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => file.path,
+        :type   => :file,
+        :path   => file.path,
         :events => [:delete])
 
       trigger.init!
@@ -41,8 +41,8 @@ describe BatchFlow::Watchers::File do
 
     it "does not trigger if not subscribed to edits" do
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => file.path,
+        :type   => :file,
+        :path   => file.path,
         :events => [:create])
 
       trigger.init!
@@ -55,8 +55,8 @@ describe BatchFlow::Watchers::File do
 
     it "triggers when modified" do
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => file.path,
+        :type   => :file,
+        :path   => file.path,
         :events => [:modify])
 
       trigger.init!
@@ -76,8 +76,8 @@ describe BatchFlow::Watchers::File do
     it "does not trigger if not subscribed to creates" do
       path = File.join(Dir.tmpdir, "*watcher_create_spec*")
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => path,
+        :type   => :file,
+        :path   => path,
         :events => [:modify])
 
       trigger.init!
@@ -94,8 +94,8 @@ describe BatchFlow::Watchers::File do
       t = Time.now.to_i
       path = File.join(Dir.tmpdir, "#{t}*")
       trigger = BatchFlow::Triggers::File.new(
-        :type => :file,
-        :path => path,
+        :type   => :file,
+        :path   => path,
         :events => [:create])
 
       trigger.init!

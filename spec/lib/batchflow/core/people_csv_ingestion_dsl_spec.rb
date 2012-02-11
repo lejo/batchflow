@@ -11,8 +11,6 @@ describe BatchFlow::Core::Dsl do
       context "first task" do
         let('first_task') {tasks.first}
         it { first_task.name.should == :wait_for_file }
-        it { first_task.runs.should == :anytime }
-        it { first_task.on_error.should == :notify }
         context "triggers" do
           let('triggers') {first_task.triggers}
           it {triggers.size.should == 1}

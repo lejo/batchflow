@@ -1,6 +1,7 @@
 module BatchFlow
   module Watchers
     class File
+      SCAN_FREQUENCY = 1.0
 
       def initialize(path, trigger, opts = {})
         @path       = path
@@ -10,7 +11,7 @@ module BatchFlow
         @delete     = opts[:delete] == true
         @file_stats = gather_stats
 
-        EM.add_periodic_timer(0.5) do
+        EM.add_periodic_timer(SCAN_FREQUENCY) do
           stats = gather_stats
           notify(stats)
           @file_stats = stats
