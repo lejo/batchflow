@@ -29,10 +29,10 @@ module BatchFlow
 
     class JobDsl
       attr_reader :tasks
-      def initialize(job_name)
+      def initialize(job_name, &block)
         @tasks = []
         @job_name = job_name
-        yield self
+        self.instance_eval &block if block_given?
       end
 
       def task(name, &block)
@@ -50,9 +50,9 @@ module BatchFlow
 
     class TaskDsl
       attr_reader :triggers, :run_config, :on_error_config, :execution_config
-      def initialize
+      def initialize(&block)
         @triggers = []
-        yield self
+        self.instance_eval &block if block_given?
       end
 
       def triggered_by(params)
