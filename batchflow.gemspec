@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "batchflow"
   s.version     = Batchflow::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Lejo Varughese", "Chaz Chandler"]
+  s.authors     = ["Lejo Varughese", "Chaz Chandler", "Sreeni Anathakrishnan"]
   s.email       = ["lejo.varughese@gmail.com", "clc31@inbox.com"]
   s.homepage    = "https://github.com/lejo/batchflow"
   s.summary     = %q{batchflow is a background jobs dependency manager for Ruby web applications.}
