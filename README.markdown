@@ -5,6 +5,6 @@ applications.
 
 ## Compatibility
 
-batchflow is tested against Ruby 1.8.7 and 1.9.3.
+batchflow is tested against Ruby 1.8.7, 1.9.2 and 1.9.3.
 
 [![Build Status](https://secure.travis-ci.org/lejo/batchflow.png)](http://travis-ci.org/lejo/batchflow)
