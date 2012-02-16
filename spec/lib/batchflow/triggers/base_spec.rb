@@ -5,7 +5,6 @@ describe 'Trigger' do
     it "should create a new File Watcher" do
       BatchFlow::Watchers::File.should_receive(:new)
       trigger_opts = {
-        :type => :file,
         :path => "/path/to/file",
         :events => [:modify]
       }
@@ -18,7 +17,6 @@ describe 'Trigger' do
     it "should create a new Time Watcher" do
       BatchFlow::Watchers::Time.should_receive(:new)
       trigger_opts = {
-        :type => :time,
         :time => Time.now,
         :events => [:chime]
       }

@@ -7,7 +7,6 @@ describe BatchFlow::Watchers::File do
 
     it "does not trigger if not subscribed to deletes" do
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => file.path,
         :events => [:create])
 
@@ -20,7 +19,6 @@ describe BatchFlow::Watchers::File do
 
     it "triggers when deleted" do
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => file.path,
         :events => [:delete])
 
@@ -41,7 +39,6 @@ describe BatchFlow::Watchers::File do
 
     it "does not trigger if not subscribed to edits" do
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => file.path,
         :events => [:create])
 
@@ -55,7 +52,6 @@ describe BatchFlow::Watchers::File do
 
     it "triggers when modified" do
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => file.path,
         :events => [:modify])
 
@@ -76,7 +72,6 @@ describe BatchFlow::Watchers::File do
     it "does not trigger if not subscribed to creates" do
       path = File.join(Dir.tmpdir, "*watcher_create_spec*")
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => path,
         :events => [:modify])
 
@@ -94,7 +89,6 @@ describe BatchFlow::Watchers::File do
       t = Time.now.to_i
       path = File.join(Dir.tmpdir, "#{t}*")
       trigger = BatchFlow::Triggers::File.new(
-        :type   => :file,
         :path   => path,
         :events => [:create])
 
