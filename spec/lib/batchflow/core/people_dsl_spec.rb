@@ -32,7 +32,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {overun_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :timer }
+          it {triggers.first.type.should == :time }
           it {triggers.first.time.should == "10.am" }
         end
       end
