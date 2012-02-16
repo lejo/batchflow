@@ -11,6 +11,10 @@ module BatchFlow
         fail
       end
 
+      def initialize(opts)
+        super(opts.merge(:type => :time))
+      end
+
       private
 
       def init_watcher
