@@ -14,7 +14,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {first_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :file }
+          it {triggers.first.class.should == BatchFlow::Triggers::File }
           it {triggers.first.path.should == "/path/to/people.csv" }
           it {triggers.first.events.should == [:create]}
         end

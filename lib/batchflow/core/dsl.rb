@@ -55,17 +55,6 @@ module BatchFlow
         self.instance_eval &block if block_given?
       end
 
-      def triggered_by(params)
-        type = params[:type]
-        if type == :file
-          @triggers << BatchFlow::Triggers::File.new(params)
-        elsif type == :timer
-          @triggers << BatchFlow::Triggers::Time.new(params)
-        elsif type == :task
-          @triggers << BatchFlow::Triggers::Task.new(params)
-        end
-      end
-
       def triggered_by_file(path, events)
         events = if events
           if !events.is_a?(Array)
@@ -76,19 +65,19 @@ module BatchFlow
         else
           [:create, :modify, :delete]
         end
-        triggered_by({:type => :file, :path => path, :events => events})
+        @triggers << BatchFlow::Triggers::File.new({:path => path, :events => events})
       end
 
       def triggered_at(time)
-        triggered_by({:type => :timer, :time => time})
+        @triggers << BatchFlow::Triggers::Time.new({:time => time})
       end
 
       def triggered_by_task(name)
-        triggered_by({:type => :task, :name => name})
+        @triggers << BatchFlow::Triggers::Task.new({:name => name})
       end
 
       def triggered_every(every)
-        triggered_by({:type => :timer, :every => every})
+        @triggers << BatchFlow::Triggers::Time.new({:every => every})
       end
 
       def runs(run_config)

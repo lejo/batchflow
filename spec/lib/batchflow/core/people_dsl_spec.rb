@@ -16,11 +16,11 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {ingest_task.triggers}
           it {triggers.size.should == 2}
-          it {triggers.first.type.should == :file }
+          it {triggers.first.class.should == BatchFlow::Triggers::File }
           it {triggers.first.path.should == "/tmp/people.csv" }
           it {triggers.first.events.should == [:modify]}
 
-          it {triggers.last.type.should == :file }
+          it {triggers.last.class.should == BatchFlow::Triggers::File }
           it {triggers.last.path.should == "/tmp/people_friends.csv" }
           it {triggers.last.events.should == [:modify]}
         end
@@ -32,7 +32,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {overun_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :time }
+          it {triggers.first.class.should == BatchFlow::Triggers::Time }
           it {triggers.first.time.should == "10.am" }
         end
       end
@@ -42,7 +42,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {index_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :task }
+          it {triggers.first.class.should == BatchFlow::Triggers::Task }
           it {triggers.first.name.should == :ingest }
         end
       end
@@ -52,7 +52,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {mappings_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :task }
+          it {triggers.first.class.should == BatchFlow::Triggers::Task }
           it {triggers.first.name.should == :ingest }
         end
       end
@@ -62,11 +62,11 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {timeline_task.triggers}
           it {triggers.size.should == 3}
-          it {triggers.first.type.should == :task }
+          it {triggers.first.class.should == BatchFlow::Triggers::Task }
           it {triggers.first.name.should == :ingest }
-          it {triggers[1].type.should == :task }
+          it {triggers[1].class.should == BatchFlow::Triggers::Task }
           it {triggers[1].name.should == :index }
-          it {triggers[2].type.should == :task }
+          it {triggers[2].class.should == BatchFlow::Triggers::Task }
           it {triggers[2].name.should == :people_location_mappings }
         end
       end

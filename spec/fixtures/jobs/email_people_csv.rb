@@ -1,6 +1,6 @@
 job "email people csv" do
 	task "email when present" do
-    triggered_by :type => :file, :path => "/path/to/people.csv", :events => [:create]
+    triggered_by_file "/path/to/people.csv", :create
   end
 end
 

@@ -14,7 +14,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {first_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :file }
+          it {triggers.first.class.should == BatchFlow::Triggers::File }
           it {triggers.first.path.should == "/path/to/people_updates.csv" }
         end
       end
@@ -24,7 +24,7 @@ describe BatchFlow::Core::Dsl do
         context "triggers" do
           let('triggers') {second_task.triggers}
           it {triggers.size.should == 1}
-          it {triggers.first.type.should == :task }
+          it {triggers.first.class.should == BatchFlow::Triggers::Task }
           it {triggers.first.name.should == :transform_file}
         end
       end
